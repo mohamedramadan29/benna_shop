@@ -28,16 +28,26 @@
                                     </div>
                                     <div class="card-sigin">
                                         <div class="main-signup-header">
-                                            <h2> اهلا بك !! </h2>
+                                            <h2> {{ trans('Dashboard/Login.welcome_back') }} </h2>
+                                            <!-- Show errors  -->
+                                            @if($errors ->any())
+                                            <div class="alert alert-danger">
+                                            <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li> {{ $error }} </li>
+                                            @endforeach    
+                                            </ul>  
+                                            @endif  
+                                            </div>
                                             <select id="section_choose" class="form-select form-select-lg mb-3 form-control"
                                                 aria-label=".form-select-lg example">
-                                                <option selected disabled> اختر طريقة الدخول </option>
-                                                <option value="user"> مريض </option>
-                                                <option value="admin"> ادمن </option>
+                                                <option selected disabled> {{ trans("Dashboard/Login.Select_permision") }} </option>
+                                                <option value="user"> {{ trans("Dashboard/Login.User") }}  </option>
+                                                <option value="admin">  {{ trans("Dashboard/Login.Admin") }}  </option>
                                             </select>
                                             <!-- Login As Patient -->
                                             <div class="login_form" id="user">
-                                                <h5 class="font-weight-semibold mb-4"> تسجيل الدخول ( مريض ) </h5>
+                                                <h5 class="font-weight-semibold mb-4"> {{ trans("Dashboard/Login.Login") }}   ( {{ trans("Dashboard/Login.User") }}  ) </h5>
                                                 <form method="POST" action="{{ route('login.user') }}">
                                                     @csrf
                                                     <div class="form-group">
@@ -68,7 +78,7 @@
 
                                             <!-- Login As Admin -->
                                             <div class="login_form" id="admin">
-                                                <h5 class="font-weight-semibold mb-4"> تسجيل الدخول ( ادمن ) </h5>
+                                                <h5 class="font-weight-semibold mb-4"> {{ trans("Dashboard/Login.Login") }} ( {{ trans("Dashboard/Login.Admin") }}  ) </h5>
                                                 <form method="POST" action="{{ route('login.admin') }}">
                                                     @csrf
                                                     <div class="form-group">

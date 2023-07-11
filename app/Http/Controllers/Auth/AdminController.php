@@ -31,11 +31,16 @@ class AdminController extends Controller
      * Store a newly created resource in storage.
      */ public function store(AdminLoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        if($request->authenticate()){
+            $request->session()->regenerate();
 
-        $request->session()->regenerate();
+            return redirect()->intended(RouteServiceProvider::ADMIN);
+        }else{
+            return redirect()->back()->withErrors(['name'=>' عفوا اسم المستخدم او كلمة المرور خطا  ']);
+        }
+        
 
-        return redirect()->intended(RouteServiceProvider::ADMIN);
+        
     }
 
     /**
