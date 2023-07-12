@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
 
             return redirect()->intended(RouteServiceProvider::HOME);
         }else{
-            return redirect()->back()->withErrors(['name'=>'اسم المستخدم او كلمة المرور خطا']);
+            return redirect()->back()->withErrors(['name'=>(trans("Dashboard/auth.failed"))]);
         }
         
 
