@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\SectionController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -19,19 +21,28 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
-    ], function(){
-    Route::get('/dashboard/user', function () {
-        return view('Dashboard.User.dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard.user');
-    Route::get('/dashboard/admin', function () {
-        return view('Dashboard.Admin.dashboard');
-    })->middleware(['auth:admin', 'verified'])->name('dashboard.admin');
-// Logout From Admin
-    Route::post('logout/admin', [AdminController::class, 'destroy'])->middleware('auth:admin')
-        ->name('logout.admin');
+        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+    ],
+    function () {
+        //////////////////////////////////////  User Dashboard ///////////////////// 
+        Route::get('/dashboard/user', function () {
+            return view('Dashboard.User.dashboard');
+        })->middleware(['auth', 'verified'])->name('dashboard.user');
+        /////////////////////////////////////// end User Dashboard ////////////////////
 
-});
+        /////////////////////////////////////// Admin Dashboard
+        Route::get('/dashboard/admin', function () {
+            return view('Dashboard.Admin.dashboard');
+        })->middleware(['auth:admin', 'verified'])->name('dashboard.admin');
+        // Logout From Admin
+        Route::post('logout/admin', [AdminController::class, 'destroy'])->middleware('auth:admin')
+            ->name('logout.admin');
+        /////////////////////////////////////// end Admin Dashboard ////////////////////// 
+        Route::middleware(['auth:admin'])->group(function () {
+            Route::resource('sections', SectionController::class);
+        });
+    }
+);
 
 
     /*
