@@ -23,4 +23,18 @@ class SectionRepository implements SectionRepoInterface
         session()->flash('add');
         return redirect()->route('sections.index');
     }
+    public function update($request)
+    {
+        $section = Section::findOrFail($request->id);
+        $section->update([
+            'name' => $request->input('name'),
+        ]);
+        return redirect()->route('sections.index');
+    }
+    public function destroy($request)
+    {
+        $section = Section::findOrFail($request->id);
+        $section->delete();
+        return redirect()->route("sections.index");
+    }
 }
