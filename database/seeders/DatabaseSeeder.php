@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AdminSeeder::class,
             DoctorTableSeeder::class,
+            ImageTableSeeder::class,
         ]);
     }
 }

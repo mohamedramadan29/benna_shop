@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\DoctorController;
 use App\Http\Controllers\Dashboard\SectionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -38,9 +39,16 @@ Route::group(
         Route::post('logout/admin', [AdminController::class, 'destroy'])->middleware('auth:admin')
             ->name('logout.admin');
         /////////////////////////////////////// end Admin Dashboard ////////////////////// 
+
+        ///////////////////////////////// START SECTIONS/////////////////////////
+
         Route::middleware(['auth:admin'])->group(function () {
             Route::resource('sections', SectionController::class);
+            //////////////////////////////// END SECTIONS /////////////////
+            ///////////////////////////////// START Doctors /////////////////////////
+            Route::resource('doctors', DoctorController::class);
         });
+        //////////////////////////////// END Doctors /////////////////
     }
 );
 
