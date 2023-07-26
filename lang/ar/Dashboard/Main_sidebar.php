@@ -2,7 +2,8 @@
 
 return[
     'project_name'=>"ادارة المستشفيات ",
-    'Categories'=>'الأقسام'
+    'Categories'=>'الأقسام',
+    'doctors'=>'الأطباء',
 ]
 
 

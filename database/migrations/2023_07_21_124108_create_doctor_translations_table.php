@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('doctortranslations', function (Blueprint $table) {
-            $table->increments('id'); 
-            $table->integer('doctor_id')->unsigned();
+            $table->id();
             $table->string('locale')->index();
             $table->string('name');
             $table->string('appointment');
             $table->unique(['doctor_id','locale']);
-            $table->foreign('doctor_id')->references('id')->on('doctors')->cascadeOnDelete();
+            $table->foreignId('doctor_id')->references('id')->on('doctors')->cascadeOnDelete();
             $table->timestamps();
         });
     }
