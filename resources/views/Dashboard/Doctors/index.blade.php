@@ -15,14 +15,14 @@
         <div class="my-auto">
             <div class="d-flex">
                 <h4 class="content-title mb-0 my-auto"> الرئيسية </h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                    الأقسام </span>
+                    الأطباء </span>
             </div>
         </div>
     </div>
     <!-- breadcrumb -->
 @endsection
 @section('content')
-@include('Dashboard.message_notification')
+    @include('Dashboard.message_notification')
     <!-- row -->
     <div class="row row-sm">
         <div class="col-xl-12">
@@ -30,9 +30,8 @@
                 <div class="card-header pb-0">
                     <div class="d-flex justify-content-between">
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            أضافة قسم جديد
-                        </button>
+                        <a class="btn btn-primary" href="{{ route('doctors.create') }}"> أضافة دكتور جديد </a>
+
                     </div>
 
                 </div>
@@ -42,32 +41,50 @@
                             <thead>
                                 <tr>
                                     <th class="wd-15p border-bottom-0"> # </th>
-                                    <th class="wd-15p border-bottom-0"> اسم القسم </th>
-                                    <th class="wd-20p border-bottom-0">تاريخ الأضافة </th>
+                                    <th class="wd-15p border-bottom-0"> اسم الدكتور </th>
+                                    <th class="wd-15p border-bottom-0"> البريد الالكتروني</th>
+                                    <th class="wd-15p border-bottom-0"> رقم الهاتف </th>
+                                    <th class="wd-15p border-bottom-0"> القسم </th>
+                                    <th class="wd-15p border-bottom-0"> الموعد </th>
+                                    <th class="wd-20p border-bottom-0"> سعر الكشف </th>
+                                    <th class="wd-20p border-bottom-0">الحالة </th>
+                                    <th class="wd-20p border-bottom-0"> تاريخ الأضافة </th>
                                     <th class="wd-15p border-bottom-0"> العمليات </th>
                                 </tr>
                             </thead>
                             <tbody>
 
-                                @foreach ($sections as $section)
+                                @foreach ($doctors as $doctor)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
-                                        <td> {{ $section->name }} </td>
-                                        <td> {{ $section->created_at->diffForHumans() }} </td>
+                                        <td> {{ $doctor->name }} </td>
+                                        <td> {{ $doctor->email }} </td>
+                                        <td> {{ $doctor->phone }} </td>
+                                        <td> {{ $doctor->section->name }} </td>
+                                        <td> {{ $doctor->appointment }} </td>
+                                        <td> {{ $doctor->price }} </td>
+                                        <td>
+                                            @if ($doctor->status == 1)
+                                                <span class="badge badge-success"> مفعل </span>
+                                            @else
+                                                <span class="badge badge-danger"> غير مفعل </span>
+                                            @endif
+                                        </td>
+                                        <td> {{ $doctor->created_at->diffForHumans() }} </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                                data-target="#edit{{ $section->id }}">
+                                                data-target="#edit{{ $doctor->id }}">
                                                 <i class="fa fa-pen"></i>
                                             </button>
 
                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                data-target="#delete{{ $section->id }}">
+                                                data-target="#delete{{ $doctor->id }}">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </td>
                                     </tr>
-                                    @include('Dashboard.Sections.edit')
-                                    @include('Dashboard.Sections.delete')
+                                    @include('Dashboard.Doctors.edit')
+                                    @include('Dashboard.Doctors.delete')
                                 @endforeach
 
                             </tbody>
@@ -76,7 +93,6 @@
 
 
                 </div>
-                @include('Dashboard.Sections.add')
             </div>
         </div>
         <!--/div-->

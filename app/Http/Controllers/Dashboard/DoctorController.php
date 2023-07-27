@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\interface\Doctors\DoctorRepoInterface;
+use App\Models\doctor;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -10,9 +12,17 @@ class DoctorController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    protected $doctors;
+
+    public function __construct(DoctorRepoInterface $Doctors)
+    {
+        $this->doctors = $Doctors;
+    }
     public function index()
     {
-       return "doctors";
+        return $this->doctors->index();
+     
     }
 
     /**
@@ -20,7 +30,7 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        //
+        return $this->doctors->create();
     }
 
     /**
