@@ -22,7 +22,7 @@ class DoctorController extends Controller
     public function index()
     {
         return $this->doctors->index();
-     
+
     }
 
     /**
@@ -38,7 +38,7 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $this->doctors->store($request);
     }
 
     /**

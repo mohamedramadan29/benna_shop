@@ -21,7 +21,8 @@
                 <div class="card-header">
                 </div>
                 <div class="card-body pt-0">
-                    <form class="form-horizontal" action="" enctype="multipart/form-data">
+                    <form method="POST" class="form-horizontal" action="{{route('doctors.store')}}" enctype="multipart/form-data">
+                        @csrf
                         <div class="form-group">
                             <input name="name" type="text" class="form-control" id="inputName" placeholder="الاسم ">
                         </div>
@@ -70,16 +71,13 @@
                                 <input name="photo" class="custom-file-input" accept="image/*" id="customFile"
                                     type="file" onchange="loadfile(event)">
                                 <label class="custom-file-label" for="customFile"> صورة الطبيب </label>
-
                             </div>
                             <img src="{{ URL::asset('Dashboard/assets/img/admin.png') }}" width="150px" height="150px"
                                 id="output" alt="">
                         </div>
                         <div class="form-group">
-                            <select class="form-control select2" name="section_id">
-                                <option readonly>
-                                    حالة الطبيب
-                                </option>
+                            <select class="form-control select2" name="status">
+
                                 <option value="1"> مفعل </option>
                                 <option value="0"> غير مفعل </option>
                             </select>
@@ -87,7 +85,6 @@
                         <div class="form-group mb-0 mt-3 justify-content-end">
                             <div>
                                 <button type="submit" class="btn btn-primary"> اضافة دكتور جديد </button>
-                                <button type="submit" class="btn btn-secondary"> رجوع </button>
                             </div>
                         </div>
                     </form>

@@ -11,7 +11,7 @@ trait uploadTrait
     public function uploadimage(Request $request, $inputname, $foldername, $disk, $imageable_id, $imageable_type)
     {
         if ($request->hasFile($inputname)) {
-            // check img 
+            // check img
             if (!$request->file($inputname)->isValid()) {
                 flash('invalid_image')->error()->important();
                 return redirect()->back()->withInput();

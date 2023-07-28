@@ -23,6 +23,7 @@ class SectionController extends Controller
     public function store(Request $request)
     {
         return $this->Sections->store($request);
+
     }
 
     public function update(Request $request)
