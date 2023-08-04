@@ -21,7 +21,8 @@
                 <div class="card-header">
                 </div>
                 <div class="card-body pt-0">
-                    <form method="POST" class="form-horizontal" action="{{route('doctors.store')}}" enctype="multipart/form-data">
+                    <form method="POST" class="form-horizontal" action="{{ route('doctors.store') }}"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <input name="name" type="text" class="form-control" id="inputName" placeholder="الاسم ">
@@ -53,13 +54,9 @@
                                 <option>
                                     اختر الموعد
                                 </option>
-                                <option value="السبت"> السبت </option>
-                                <option value="الأحد"> الأحد </option>
-                                <option value="الأثنين"> الأثنين </option>
-                                <option value="الثلاثاء"> الثلاثاء </option>
-                                <option value="الأربعاء"> الأربعاء </option>
-                                <option value="الخميس"> الخميس </option>
-
+                                @foreach ($appoiments as $appoiment)
+                                    <option value="{{ $appoiment->name }}"> {{ $appoiment->name }} </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
@@ -72,8 +69,9 @@
                                     type="file" onchange="loadfile(event)">
                                 <label class="custom-file-label" for="customFile"> صورة الطبيب </label>
                             </div>
-                            <img src="{{ URL::asset('Dashboard/assets/img/admin.png') }}" width="150px" height="150px"
+                            <img src="{{ URL::asset('Dashboard/img/default.png') }}" width="150px" height="150px"
                                 id="output" alt="">
+
                         </div>
                         <div class="form-group">
                             <select class="form-control select2" name="status">

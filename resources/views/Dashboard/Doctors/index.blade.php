@@ -31,9 +31,7 @@
                     <div class="d-flex justify-content-between">
                         <!-- Button trigger modal -->
                         <a class="btn btn-primary" href="{{ route('doctors.create') }}"> أضافة دكتور جديد </a>
-
                     </div>
-
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -41,6 +39,7 @@
                             <thead>
                                 <tr>
                                     <th class="wd-15p border-bottom-0"> # </th>
+                                    <th class="wd-15p border-bottom-0"> صورة الطبيب </th>
                                     <th class="wd-15p border-bottom-0"> اسم الدكتور </th>
                                     <th class="wd-15p border-bottom-0"> البريد الالكتروني</th>
                                     <th class="wd-15p border-bottom-0"> رقم الهاتف </th>
@@ -57,6 +56,15 @@
                                 @foreach ($doctors as $doctor)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
+                                        <td>
+                                            @if ($doctor->image)
+                                                <img src="{{ URL::asset('Dashboard/img/doctors/' . $doctor->image->filename) }}"
+                                                    alt="">
+                                            @else
+                                                <img src="{{ URL::asset('Dashboard/img/default.png') }}"
+                                                    alt="">
+                                            @endif
+                                        </td>
                                         <td> {{ $doctor->name }} </td>
                                         <td> {{ $doctor->email }} </td>
                                         <td> {{ $doctor->phone }} </td>

@@ -22,7 +22,7 @@
     <!-- breadcrumb -->
 @endsection
 @section('content')
-@include('Dashboard.message_notification')
+    @include('Dashboard.message_notification')
     <!-- row -->
     <div class="row row-sm">
         <div class="col-xl-12">
@@ -53,6 +53,7 @@
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
                                         <td> {{ $section->name }} </td>
+                                        <td> {{ Str::limit( $section->description, 50, '...') }} </td>
                                         <td> {{ $section->created_at->diffForHumans() }} </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal"

@@ -18,6 +18,9 @@
                         <input type="text" class="form-control" name="name" id="inputName"
                             placeholder="اسم القسم " value="{{ $section->name }}">
                     </div>
+                    <div class="form-group">
+                        <textarea name="description" id="" class="form-control" placeholder="وصف القسم">{{ $section->description }}</textarea> 
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"> اغلاق </button>
                         <button class="btn btn-primary" type="submit"> تعديل القسم </button>

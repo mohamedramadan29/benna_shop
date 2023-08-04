@@ -18,6 +18,7 @@ class SectionRepository implements SectionRepoInterface
         Section::create(
             [
                 'name' => $request->input('name'),
+                'description' => $request->input('description'),
             ]
         );
         session()->flash('add');
@@ -28,6 +29,7 @@ class SectionRepository implements SectionRepoInterface
         $section = Section::findOrFail($request->id);
         $section->update([
             'name' => $request->input('name'),
+            'description' => $request->input('description'),
         ]);
         return redirect()->route('sections.index');
     }

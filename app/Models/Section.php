@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Section extends Model
 {
     use Translatable;
-    protected $fillable = ['name'];
-    public $translatedAttributes = ['name'];
+    protected $fillable = ['name','description'];
+    public $translatedAttributes = ['name','description'];
     use HasFactory;
 }

@@ -3,25 +3,29 @@
 namespace App\Repository\Doctors;
 
 use App\interface\Doctors\DoctorRepoInterface;
+use App\Models\Appointment;
 use App\Models\doctor;
 use App\Models\Section;
 use App\Traits\uploadTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+
 class DoctorRepository implements DoctorRepoInterface
 {
     use uploadTrait;
     public function index()
     {
         $doctors = doctor::all();
-        return view('Dashboard.Doctors.index', compact('doctors'));
+        $appoiments = Appointment::all();
+        return view('Dashboard.Doctors.index', compact('doctors','appoiments'));
     }
 
     public function create()
     {
         $sections = Section::all();
-        return view('Dashboard.Doctors.add', compact('sections'));
+        $appoiments = Appointment::all();
+        return view('Dashboard.Doctors.add', compact('sections','appoiments'));
     }
 
     public function store($request)
@@ -41,15 +45,15 @@ class DoctorRepository implements DoctorRepoInterface
             $doctor->appointment = implode(',', $request->appointment);
             $doctor->save();
             // upload image
-            /*
-            $this->uploadimage($request,'photo','doctors','uploadimage',$doctor->id,'App\Models\doctor');
-            */
+
+            $this->uploadimage($request, 'photo', 'doctors', 'uploadimage', $doctor->id, 'App\Models\doctor');
+
             DB::commit();
             session()->flash('add');
             return redirect()->route('Doctors.create');
         } catch (\Exception $e) {
             DB::rollBack();
-            return  redirect()->back()->withErrors(['error'=>$e->getMessage()]);
+            return  redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 }

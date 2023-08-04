@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('section_id')->references('id')->on('sections')->onDelete('cascade');
             // Actual fields you want to translate
             $table->string('name');
+            $table->longText('description')->nullable();
         });
     }
 
