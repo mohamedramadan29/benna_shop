@@ -18,14 +18,14 @@ class DoctorRepository implements DoctorRepoInterface
     {
         $doctors = doctor::all();
         $appoiments = Appointment::all();
-        return view('Dashboard.Doctors.index', compact('doctors','appoiments'));
+        return view('Dashboard.Doctors.index', compact('doctors', 'appoiments'));
     }
 
     public function create()
     {
         $sections = Section::all();
         $appoiments = Appointment::all();
-        return view('Dashboard.Doctors.add', compact('sections','appoiments'));
+        return view('Dashboard.Doctors.add', compact('sections', 'appoiments'));
     }
 
     public function store($request)
@@ -54,6 +54,20 @@ class DoctorRepository implements DoctorRepoInterface
         } catch (\Exception $e) {
             DB::rollBack();
             return  redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+    public function destroy($request)
+    {
+        $id = $request->id;
+        if ($request->page_id == 1) {
+            if ($request->filename) {
+                $this->deleteattachments('uploadimage', 'doctors/' . $request->filename, $id, $request->filename);
+            }
+            doctor::destroy($id);
+            session()->flash('delete');
+            return redirect()->route("doctors.index");
+        } else {
+            echo "delete more";
         }
     }
 }

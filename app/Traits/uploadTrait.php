@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 trait uploadTrait
@@ -34,5 +35,10 @@ trait uploadTrait
         }
 
         return null;
+    }
+    public function deleteattachments($disk, $path, $id, $filename)
+    {
+        Storage::disk($disk)->delete($path);
+        Image::where('id', $id)->where('filename', $filename)->delete();
     }
 }

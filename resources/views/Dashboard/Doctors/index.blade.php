@@ -28,9 +28,10 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header pb-0">
-                    <div class="d-flex justify-content-between">
+                    <div class=" ">
                         <!-- Button trigger modal -->
-                        <a class="btn btn-primary" href="{{ route('doctors.create') }}"> أضافة دكتور جديد </a>
+                        <a class="btn btn-primary btn-sm" href="{{ route('doctors.create') }}"> أضافة دكتور جديد </a>
+                        <button id="btn_delete_all" class="btn btn-danger btn-sm"> حذف المحدد </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -39,6 +40,8 @@
                             <thead>
                                 <tr>
                                     <th class="wd-15p border-bottom-0"> # </th>
+                                    <th class="border-bottom-0"> <input type='checkbox' name='select_all'
+                                            class="form-control select_all" /> </th>
                                     <th class="wd-15p border-bottom-0"> صورة الطبيب </th>
                                     <th class="wd-15p border-bottom-0"> اسم الدكتور </th>
                                     <th class="wd-15p border-bottom-0"> البريد الالكتروني</th>
@@ -56,13 +59,14 @@
                                 @foreach ($doctors as $doctor)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
+                                        <td> <input type='checkbox' name='delete_select' class="delete_select"
+                                                value="{{ $doctor->id }}" /> </td>
                                         <td>
                                             @if ($doctor->image)
                                                 <img src="{{ URL::asset('Dashboard/img/doctors/' . $doctor->image->filename) }}"
                                                     alt="">
                                             @else
-                                                <img src="{{ URL::asset('Dashboard/img/default.png') }}"
-                                                    alt="">
+                                                <img src="{{ URL::asset('Dashboard/img/default.png') }}" alt="">
                                             @endif
                                         </td>
                                         <td> {{ $doctor->name }} </td>
@@ -134,4 +138,22 @@
     <script src="{{ URL::asset('Dashboard/assets/plugins/notify/js/notifit-custom.js') }}"></script>
     <!--Internal  Datatable js -->
     <script src="{{ URL::asset('Dashboard/assets/js/table-data.js') }}"></script>
+    <script>
+        $(function() {
+            jQuery("[name=select_all]").click(function(source) {
+                checkboxes = jQuery("[name=delete_select]");
+                for (var i in checkboxes) {
+                    checkboxes[i].checked = source.target.checked
+                }
+            })
+        });
+    </script>
+
+    <script type="text/javascript">
+    $(function() {
+        $("#btn_delete_all").click(function(){
+
+        });
+    })
+    </script>
 @endsection
