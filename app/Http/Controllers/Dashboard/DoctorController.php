@@ -22,7 +22,6 @@ class DoctorController extends Controller
     public function index()
     {
         return $this->doctors->index();
-
     }
 
     /**
@@ -68,8 +67,8 @@ class DoctorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        return $this->doctors->destroy($request);
     }
 }

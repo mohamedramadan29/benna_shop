@@ -4,7 +4,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> حذف القسم </h5>
+                <h5 class="modal-title" id="exampleModalLabel"> حذف الدكتور </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,12 +14,16 @@
                     @csrf
                     {{ method_field('DELETE') }}
                     <div class="form-group">
-                        <h2> هل انت متاكد من حذف القسم ؟؟ </h2>
+                        <h6> هل انت متاكد من حذف الدكتور ؟؟ </h6>
                         <input type="hidden" name="id" value="{{ $doctor->id }}">
+                        <input type="hidden" name="page_id" value="1">
+                        @if (isset($doctor->image->filename))
+                            <input type="hidden" name="filename" value="{{ $doctor->image->filename }}">
+                        @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"> اغلاق </button>
-                        <button class="btn btn-primary" type="submit"> حذف  القسم </button>
+                        <button class="btn btn-primary" type="submit"> حذف الدكتور </button>
                     </div>
                 </form>
             </div>
