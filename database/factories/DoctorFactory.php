@@ -19,12 +19,10 @@ class DoctorFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'appointment' => $this->faker->randomElement(['sunday', 'monday', 'thursday', 'tuseday', 'friday']),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => rand(5, 10),
             'phone' => $this->faker->phoneNumber(),
-            'price' => $this->faker->randomElement([100, 200, 300, 400, 500]),
             'section_id' => Section::all()->random()->id
         ];
     }
