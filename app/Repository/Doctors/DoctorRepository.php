@@ -67,7 +67,10 @@ class DoctorRepository implements DoctorRepoInterface
             session()->flash('delete');
             return redirect()->route("doctors.index");
         } else {
+<<<<<<< HEAD
             echo "delete more";
+=======
+>>>>>>> 3f2d0960319825eabe5337609a4f06e795b53bfe
         }
     }
 }
