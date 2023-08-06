@@ -38,7 +38,6 @@ class DoctorRepository implements DoctorRepoInterface
             $doctor->password = Hash::make($request->password);
             $doctor->section_id = $request->section_id;
             $doctor->phone = $request->phone;
-            $doctor->price = $request->price;
             $doctor->status = $request->status;
             $doctor->save();
             $doctor->name = $request->name;
@@ -67,10 +66,16 @@ class DoctorRepository implements DoctorRepoInterface
             session()->flash('delete');
             return redirect()->route("doctors.index");
         } else {
-<<<<<<< HEAD
-            echo "delete more";
-=======
->>>>>>> 3f2d0960319825eabe5337609a4f06e795b53bfe
+            $delete_select_id = explode(',', $request->delete_select_id);
+            foreach ($delete_select_id as $select_id) {
+                $doctor = doctor::findOrFail($select_id);
+                if ($doctor->image) {
+                    $this->deleteattachments('uploadimage', 'doctors/' . $doctor->image->filename, $select_id, $doctor->image->filename);
+                }
+            }
+            doctor::destroy($delete_select_id);
+            session()->flash('delete');
+            return redirect()->route("doctors.index");
         }
     }
 }

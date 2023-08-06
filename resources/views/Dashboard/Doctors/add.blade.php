@@ -25,7 +25,7 @@
                         enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <input name="name" type="text" class="form-control" id="inputName" placeholder="الاسم ">
+                            <input autofocus name="name" type="text" class="form-control" id="inputName" placeholder="الاسم ">
                         </div>
                         <div class="form-group">
                             <input name="email" type="email" class="form-control" id="inputEmail3"
@@ -59,10 +59,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
-                            <input name="price" type="number" class="form-control" id="inputName"
-                                placeholder=" سعر الكشف  ">
-                        </div>
+                    
                         <div class="form-group">
                             <div class="custom-file">
                                 <input name="photo" class="custom-file-input" accept="image/*" id="customFile"
