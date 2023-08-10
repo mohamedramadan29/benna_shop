@@ -47,7 +47,8 @@
                                     <th class="wd-15p border-bottom-0"> البريد الالكتروني</th>
                                     <th class="wd-15p border-bottom-0"> رقم الهاتف </th>
                                     <th class="wd-15p border-bottom-0"> القسم </th>
-                                    <th class="wd-30p border-bottom-0"> الموعد </th>
+                                    <th class="wd-15p border-bottom-0"> الموعد </th>
+                                    <th class="wd-20p border-bottom-0"> سعر الكشف </th>
                                     <th class="wd-20p border-bottom-0">الحالة </th>
                                     <th class="wd-20p border-bottom-0"> تاريخ الأضافة </th>
                                     <th class="wd-15p border-bottom-0"> العمليات </th>
@@ -72,11 +73,10 @@
                                         <td> {{ $doctor->email }} </td>
                                         <td> {{ $doctor->phone }} </td>
                                         <td> {{ $doctor->section->name }} </td>
-                                        <td>
-                                            @foreach ($doctor->docotorappoiments as $appoiments)
-                                                {{ $appoiments->name }}
-                                            @endforeach
-                                        </td>
+                                        <td> {{ $doctor->appointment }} </td>
+                                        <td> {{ $doctor->price }} </td>
+
+                                        
                                         <td>
                                             @if ($doctor->status == 1)
                                                 <span class="badge badge-success"> مفعل </span>
@@ -86,28 +86,15 @@
                                         </td>
                                         <td> {{ $doctor->created_at->diffForHumans() }} </td>
                                         <td>
-                                            <div class="btn-group dropdown">
-                                                <button type="button" class="btn btn-warning btn-sm">العمليات</button>
-                                                <button type="button"
-                                                    class="btn btn-warning btn-sm dropdown-toggle dropdown-toggle-split"
-                                                    id="dropdownMenuDate" data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                    <span class="sr-only">Toggle Dropdown</span>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-left"
-                                                    aria-labelledby="dropdownMenuDate" data-x-placement="bottom-end">
-                                                    <a class="dropdown-item" href="#"> تغير كلمة المرور </a>
-                                                    <a class="dropdown-item" href="#">تغير الحالة </a>
-                                                    <a type="button" class="dropdown-item" data-toggle="modal"
-                                                        data-target="#delete{{ $doctor->id }}">
-                                                        <i class="fa fa-trash"></i> حذف
-                                                    </a>
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('doctors.edit', $doctor->id) }}">
-                                                        <i class="fa fa-pen"></i> تعديل
-                                                    </a>
-                                                </div>
-                                            </div>
+                                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                                data-target="#edit{{ $doctor->id }}">
+                                                <i class="fa fa-pen"></i>
+                                            </button>
+
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                data-target="#delete{{ $doctor->id }}">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                     @include('Dashboard.Doctors.delete')
