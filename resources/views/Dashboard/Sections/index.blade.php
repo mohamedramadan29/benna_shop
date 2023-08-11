@@ -52,8 +52,9 @@
                                 @foreach ($sections as $section)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
-                                        <td> {{ $section->name }} </td>
-                                        <td> {{ Str::limit( $section->description, 50, '...') }} </td>
+                                        <td> <a href="{{ route('sections.show', $section->id) }}"> {{ $section->name }} </a>
+                                        </td>
+                                        <td> {{ Str::limit($section->description, 50, '...') }} </td>
                                         <td> {{ $section->created_at->diffForHumans() }} </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
