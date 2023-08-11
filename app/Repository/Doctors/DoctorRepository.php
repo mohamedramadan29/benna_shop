@@ -38,19 +38,20 @@ class DoctorRepository implements DoctorRepoInterface
             $doctor->section_id = $request->section_id;
             $doctor->phone = $request->phone;
             $doctor->status = $request->status;
+            $doctor->save();
+            // stor trans
             $doctor->name = $request->name; // قم بتحريك هذا السطر قبل حفظ الطبيب
-
             $doctor->save();
 
             // تحديد مواعيد العيادات للطبيب الجديد
-            $doctor->appointments()->attach($request->appointment);
+            $doctor->docotorappoiments()->attach($request->appointment);
 
             // رفع الصورة
             $this->uploadimage($request, 'photo', 'doctors', 'uploadimage', $doctor->id, 'App\Models\Doctor');
 
             DB::commit();
             session()->flash('add');
-            return redirect()->route('Doctors.create');
+            return redirect()->route('doctors.index');
         } catch (\Exception $e) {
             DB::rollBack();
             return  redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -113,7 +114,7 @@ class DoctorRepository implements DoctorRepoInterface
                 $this->uploadimage($request, 'photo', 'doctors', 'uploadimage', $request->id, 'App\Models\doctor');
             }
             DB::commit();
-            session()->flash('edit');
+            session()->flash('success');
             return redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();

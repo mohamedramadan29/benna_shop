@@ -16,6 +16,15 @@
 @section('content')
     <!-- row -->
     <div class="row row-sm">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
             <div class="card  box-shadow-0">
                 <div class="card-header">
@@ -25,7 +34,8 @@
                         enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <input autofocus name="name" type="text" class="form-control" id="inputName" placeholder="الاسم ">
+                            <input autofocus name="name" type="text" class="form-control" id="inputName"
+                                placeholder="الاسم ">
                         </div>
                         <div class="form-group">
                             <input name="email" type="email" class="form-control" id="inputEmail3"
@@ -55,11 +65,11 @@
                                     اختر الموعد
                                 </option>
                                 @foreach ($appoiments as $appoiment)
-                                    <option value="{{ $appoiment->name }}"> {{ $appoiment->name }} </option>
+                                    <option value="{{ $appoiment->id }}"> {{ $appoiment->name }} </option>
                                 @endforeach
                             </select>
                         </div>
-                    
+
                         <div class="form-group">
                             <div class="custom-file">
                                 <input name="photo" class="custom-file-input" accept="image/*" id="customFile"
