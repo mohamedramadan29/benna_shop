@@ -25,6 +25,15 @@
     @include('Dashboard.message_notification')
     <!-- row125 -->
     <div class="row row-sm">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header pb-0">
@@ -73,10 +82,12 @@
                                         <td> {{ $doctor->email }} </td>
                                         <td> {{ $doctor->phone }} </td>
                                         <td> {{ $doctor->section->name }} </td>
-                                        <td> {{ $doctor->appointment }} </td>
+                                        <td>
+                                            @foreach ($doctor->docotorappoiments as $appointment)
+                                                {{ $appointment->name }}
+                                            @endforeach
+                                        </td>
                                         <td> {{ $doctor->price }} </td>
-
-                                        
                                         <td>
                                             @if ($doctor->status == 1)
                                                 <span class="badge badge-success"> مفعل </span>
@@ -86,19 +97,27 @@
                                         </td>
                                         <td> {{ $doctor->created_at->diffForHumans() }} </td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                                data-target="#edit{{ $doctor->id }}">
-                                                <i class="fa fa-pen"></i>
-                                            </button>
-
+                                            <a class="btn btn-success btn-sm"
+                                                href="{{ route('doctors.edit', $doctor->id) }}"><i
+                                                    class="fa fa-pen"></i></a>
                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                                 data-target="#delete{{ $doctor->id }}">
                                                 <i class="fa fa-trash"></i>
                                             </button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                data-target="#update_password{{ $doctor->id }}">
+                                                <i class="fa fa-password"></i>باسورد
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                            data-target="#update_status{{ $doctor->id }}">
+                                            <i class="fa fa-password"></i>الحالة 
+                                        </button>
                                         </td>
                                     </tr>
                                     @include('Dashboard.Doctors.delete')
                                     @include('Dashboard.Doctors.delete_select')
+                                    @include('Dashboard.Doctors.update_password')
+                                    @include('Dashboard.Doctors.update_status')
                                 @endforeach
 
                             </tbody>

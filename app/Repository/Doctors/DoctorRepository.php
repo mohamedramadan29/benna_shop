@@ -3,6 +3,7 @@
 namespace App\Repository\Doctors;
 
 use App\interface\Doctors\DoctorRepoInterface;
+use App\Models\Appoiment_doctor;
 use App\Models\Appointment;
 use App\Models\doctor;
 use App\Models\Section;
@@ -27,25 +28,25 @@ class DoctorRepository implements DoctorRepoInterface
         $appoiments = Appointment::all();
         return view('Dashboard.Doctors.add', compact('sections', 'appoiments'));
     }
-
     public function store($request)
     {
-
         DB::beginTransaction();
         try {
-            $doctor = new doctor();
+            $doctor = new Doctor();
             $doctor->email = $request->email;
             $doctor->password = Hash::make($request->password);
             $doctor->section_id = $request->section_id;
             $doctor->phone = $request->phone;
             $doctor->status = $request->status;
-            $doctor->save();
-            $doctor->name = $request->name;
-            $doctor->appointment = implode(',', $request->appointment);
-            $doctor->save();
-            // upload image
+            $doctor->name = $request->name; // قم بتحريك هذا السطر قبل حفظ الطبيب
 
-            $this->uploadimage($request, 'photo', 'doctors', 'uploadimage', $doctor->id, 'App\Models\doctor');
+            $doctor->save();
+
+            // تحديد مواعيد العيادات للطبيب الجديد
+            $doctor->appointments()->attach($request->appointment);
+
+            // رفع الصورة
+            $this->uploadimage($request, 'photo', 'doctors', 'uploadimage', $doctor->id, 'App\Models\Doctor');
 
             DB::commit();
             session()->flash('add');
@@ -55,6 +56,7 @@ class DoctorRepository implements DoctorRepoInterface
             return  redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
     public function destroy($request)
     {
         $id = $request->id;
@@ -85,5 +87,68 @@ class DoctorRepository implements DoctorRepoInterface
         $appoiments = Appointment::all();
         $doctor = doctor::findorFail($id);
         return view('Dashboard.Doctors.edit', compact('sections', 'appoiments', 'doctor'));
+    }
+    public function update($request)
+    {
+        DB::beginTransaction();
+        try {
+            $doctor = doctor::findorFail($request->id);
+            $doctor->email = $request->email;
+            $doctor->section_id = $request->section_id;
+            $doctor->phone = $request->phone;
+            $doctor->status = $request->status;
+            $doctor->save();
+            $doctor->name = $request->name;
+            $doctor->save();
+            // update pivate table
+            $doctor->docotorappoiments()->sync($request->appointment);
+            // update image
+            if ($request->has("photo")) {
+                // delete old photo
+                if ($doctor->image) {
+                    $old_image = $doctor->image->filename;
+                    $this->deleteattachments('uploadimage', 'doctors/' . $old_image, $request->id, $old_image);
+                }
+                // upload image
+                $this->uploadimage($request, 'photo', 'doctors', 'uploadimage', $request->id, 'App\Models\doctor');
+            }
+            DB::commit();
+            session()->flash('edit');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    // update password 
+
+    public function update_password($request)
+    {
+        try {
+            $doctor = doctor::findorFail($request->id);
+            $doctor->update([
+                'password' => Hash::make($request->password)
+            ]);
+            session()->flash('success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    // update status
+    public function update_status($request)
+    {
+        try {
+            $doctor = doctor::findorFail($request->id);
+            $doctor->update([
+                'status' => $request->status
+            ]);
+            session()->flash('success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 }

@@ -47,6 +47,8 @@ Route::group(
             //////////////////////////////// END SECTIONS /////////////////
             ///////////////////////////////// START Doctors /////////////////////////
             Route::resource('doctors', DoctorController::class);
+            Route::post('update_password', [DoctorController::class, 'update_password'])->name('update_password');
+            Route::post('update_status',[DoctorController::class,'update_status'])->name('update_status');
         });
         //////////////////////////////// END Doctors /////////////////
     }

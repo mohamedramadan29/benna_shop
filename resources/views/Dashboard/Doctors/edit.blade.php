@@ -26,6 +26,7 @@
                         @csrf
                         {{ method_field('PATCH') }}
                         <div class="form-group">
+                            <input type="hidden" name="id" value="{{ $doctor->id }}">
                             <input value="{{ $doctor->name }}" autofocus name="name" type="text" class="form-control"
                                 id="inputName" placeholder="الاسم ">
                         </div>
