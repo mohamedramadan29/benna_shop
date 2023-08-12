@@ -50,7 +50,6 @@ class ServicesRepository implements ServiceRepInterface
     }
     public function destroy($request)
     {
-
         Service::destroy($request->id);
         session()->flash('delete');
         return redirect()->back();
