@@ -53,6 +53,9 @@ Route::group(
             //////////////////////////////// END Doctors /////////////////
             //////////////////////////////// START SERVICES  /////////////////
             Route::resource('service',  ServicesController::class);
+
+            ////////////////// START GROUP SERVICES  //////////
+            Route::view('add_group_services','livewire.GroupService.include-create')->name('group_services');
             //////////////////////////////// END  SERVICES  /////////////////
         });
     }

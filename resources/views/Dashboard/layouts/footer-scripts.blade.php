@@ -51,3 +51,4 @@
 <!-- custom js -->
 <script src="{{ URL::asset('Dashboard/assets/js/custom.js') }}"></script><!-- Left-menu js-->
 <script src="{{ URL::asset('Dashboard/assets/plugins/side-menu/sidemenu.js') }}"></script>
+@livewireScripts
