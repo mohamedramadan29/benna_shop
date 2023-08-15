@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DoctorController;
+use App\Http\Controllers\Dashboard\InsuranceController;
 use App\Http\Controllers\Dashboard\SectionController;
 use App\Http\Controllers\Dashboard\ServicesController;
 use Illuminate\Support\Facades\Auth;
@@ -55,8 +56,11 @@ Route::group(
             Route::resource('service',  ServicesController::class);
 
             ////////////////// START GROUP SERVICES  //////////
-            Route::view('add_group_services','livewire.GroupService.include-create')->name('group_services');
+            Route::view('add_group_services', 'livewire.GroupService.include-create')->name('group_services');
             //////////////////////////////// END  SERVICES  /////////////////
+            /***************************  start Insurance Company  **/
+            Route::resource('insurance_company', InsuranceController::class);
+            /***************************  End  Insurance Company  **/
         });
     }
 );

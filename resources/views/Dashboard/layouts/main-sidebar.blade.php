@@ -81,6 +81,7 @@
                     <li><a class="slide-item" href="{{ route('group_services') }}"> الخدمات المجمعه
                         </a>
                     </li>
+                    <li><a class="slide-item" href="{{ route('insurance_company.index') }}"> شركات التأمين </a></li>
                 </ul>
             </li>
             <li class="side-item side-item-category">الاعدادات</li>
