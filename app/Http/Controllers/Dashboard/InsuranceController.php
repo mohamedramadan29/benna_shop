@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\InsuranceValidation;
 use App\interface\Insurance\InsuranceRepoInterface;
 use Illuminate\Http\Request;
 
@@ -32,9 +33,9 @@ class InsuranceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(InsuranceValidation $request)
     {
-        //
+        return  $this->Insurance->store($request);
     }
 
     /**
@@ -56,9 +57,9 @@ class InsuranceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(InsuranceValidation $request)
     {
-        //
+        return $this->Insurance->update($request);
     }
 
     /**

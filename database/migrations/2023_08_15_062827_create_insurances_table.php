@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('insurances', function (Blueprint $table) {
             $table->id();
             $table->string('insurance_code');
-            $table->string('discount_percentage')->nullable();
+            $table->string('discount_percentage');
             $table->string('company_rate');
             $table->boolean('status');
             $table->timestamps();
