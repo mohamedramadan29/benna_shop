@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\InsuranceValidation;
 use App\interface\Insurance\InsuranceRepoInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class InsuranceController extends Controller
 {
@@ -27,13 +28,13 @@ class InsuranceController extends Controller
      */
     public function create()
     {
-        //
+        return $this->Insurance->create();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(InsuranceValidation $request)
+    public function store (Request $request)
     {
         return  $this->Insurance->store($request);
     }
@@ -57,7 +58,7 @@ class InsuranceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(InsuranceValidation $request)
+    public function update(Request $request)
     {
         return $this->Insurance->update($request);
     }
@@ -65,8 +66,8 @@ class InsuranceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        return $this->Insurance->destroy($request);
     }
 }
