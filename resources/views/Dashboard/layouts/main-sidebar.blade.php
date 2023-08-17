@@ -82,6 +82,7 @@
                         </a>
                     </li>
                     <li><a class="slide-item" href="{{ route('insurance_company.index') }}"> شركات التأمين </a></li>
+                    <li><a class="slide-item" href="{{ route('Ambulance.index') }}"> سيارات الأسعاف </a></li>
                 </ul>
             </li>
             <li class="side-item side-item-category">الاعدادات</li>
