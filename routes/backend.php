@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\AmulanceController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DoctorController;
 use App\Http\Controllers\Dashboard\InsuranceController;
+use App\Http\Controllers\Dashboard\PatientsController;
 use App\Http\Controllers\Dashboard\SectionController;
 use App\Http\Controllers\Dashboard\ServicesController;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +65,9 @@ Route::group(
             /***************************  End  Insurance Company  **/
             /***************************  start Amulances  **/
             Route::resource('Ambulance', AmulanceController::class);
+            /***************************  End  Amulances  **/
+            /***************************  start Amulances  **/
+            Route::resource('Patients', PatientsController::class);
             /***************************  End  Amulances  **/
         });
     }
