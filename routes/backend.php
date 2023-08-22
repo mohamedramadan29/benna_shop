@@ -29,7 +29,7 @@ Route::group(
         'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
     ],
     function () {
-        //////////////////////////////////////  User Dashboard ///////////////////// 
+        //////////////////////////////////////  User Dashboard /////////////////////
         Route::get('/dashboard/user', function () {
             return view('Dashboard.User.dashboard');
         })->middleware(['auth', 'verified'])->name('dashboard.user');
@@ -42,7 +42,7 @@ Route::group(
         // Logout From Admin
         Route::post('logout/admin', [AdminController::class, 'destroy'])->middleware('auth:admin')
             ->name('logout.admin');
-        /////////////////////////////////////// end Admin Dashboard ////////////////////// 
+        /////////////////////////////////////// end Admin Dashboard //////////////////////
 
         ///////////////////////////////// START SECTIONS/////////////////////////
 
@@ -69,6 +69,9 @@ Route::group(
             /***************************  start Amulances  **/
             Route::resource('Patients', PatientsController::class);
             /***************************  End  Amulances  **/
+            /***************************  start Single Invoice LiveWire  **/
+            Route::view('single_invoice','livewire.SingleInvoices.index')->name('single_invoice');
+            /***************************  End  Single Invoice LiveWire   **/
         });
     }
 );
