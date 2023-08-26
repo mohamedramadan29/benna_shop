@@ -92,7 +92,7 @@
 
                 </div>
                 @include('Dashboard.Services.single_Services.add')
-                @include('Dashboard.Services.single_Services.edit')
+               
             </div>
         </div>
         <!--/div-->
