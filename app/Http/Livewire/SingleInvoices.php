@@ -3,7 +3,9 @@
 namespace App\Http\Livewire;
 
 use App\Models\doctor;
+use App\Models\FundAcount;
 use App\Models\Patient;
+use App\Models\PatientAccount;
 use App\Models\Service;
 use App\Models\SingleInvoice;
 use Hamcrest\Type\IsNumeric;
@@ -14,7 +16,8 @@ class SingleInvoices extends Component
 {
     public $invoice_saved, $invoice_update;
     public $show_table = true;
-    public $price, $discount_value, $patient_id, $doctor_id, $section_id, $Service_id, $type;
+    public $price, $discount_value = 0, $patient_id, $doctor_id, $section_id, $Service_id, $type, $single_invoice_id;
+    public $updateMode = false;
     public $tax_rate = 17;
     public function render()
     {
@@ -40,28 +43,164 @@ class SingleInvoices extends Component
     {
         $this->price = Service::where("id", $this->Service_id)->first()->price;
     }
+    public function edit($id)
+    {
+        //dd($id);
+        $this->updateMode = true;
+        $this->show_table = false;
+        $single_invoice = SingleInvoice::findOrFail($id);
+        $this->single_invoice_id = $single_invoice->id;
+        $this->patient_id = $single_invoice->patient_id;
+        $this->doctor_id = $single_invoice->doctor_id;
+        $this->section_id = DB::table('section_translations')->where('id', $single_invoice->section_id)->first()->name;
+        $this->Service_id = $single_invoice->service_id;
+        $this->price = $single_invoice->price;
+        $this->discount_value = $single_invoice->discount_value;
+        $this->type = $single_invoice->type;
+    }
     // insert into db 
 
     public function store()
     {
+        if ($this->type == 1) {
+            DB::beginTransaction();
+            // تعديل الفاتورة
+            try {
+                if ($this->updateMode) {
+                    $single_invoices = SingleInvoice::findOrFail($this->single_invoice_id);
+                    $single_invoices->invoice_date = date('Y-m-d');
+                    $single_invoices->patient_id = $this->patient_id;
+                    $single_invoices->doctor_id = $this->doctor_id;
+                    $single_invoices->section_id = DB::table('section_translations')->where('name', $this->section_id)->first()->section_id;
+                    $single_invoices->Service_id = $this->Service_id;
+                    $single_invoices->price = $this->price;
+                    $single_invoices->discount_value = $this->discount_value;
+                    $single_invoices->tax_rate = $this->tax_rate;
+                    // قيمة الضريبة = السعر - الخصم * نسبة الضريبة /100
+                    $single_invoices->tax_value = ($this->price - $this->discount_value) * ((is_numeric($this->tax_rate) ? $this->tax_rate : 0) / 100);
+                    // الاجمالي شامل الضريبة  = السعر - الخصم + قيمة الضريبة
+                    $single_invoices->total_with_tax = $single_invoices->price -  $single_invoices->discount_value + $single_invoices->tax_value;
+                    $single_invoices->type = $this->type;
+                    $single_invoices->save();
+                    // يتم التسجيل في جدول الصندوق 
+                    $fund_accounts = FundAcount::where("single_invoice_id", $this->single_invoice_id)->first();
+                    $fund_accounts->date = date('Y-m-d');
+                    $fund_accounts->single_invoice_id = $single_invoices->id;
+                    $fund_accounts->debit = $single_invoices->total_with_tax;
+                    $fund_accounts->credit = 0.00;
+                    $fund_accounts->save();
+                    $this->invoice_saved = true;
+                    $this->show_table = true;
+                    // حفظ الفاتورة 
+                } else {
+                    // الفاتورة نقدي 
+                    $single_invoices = new SingleInvoice();
+                    $single_invoices->invoice_date = date('Y-m-d');
+                    $single_invoices->patient_id = $this->patient_id;
+                    $single_invoices->doctor_id = $this->doctor_id;
+                    $single_invoices->section_id = DB::table('section_translations')->where('name', $this->section_id)->first()->section_id;
+                    $single_invoices->Service_id = $this->Service_id;
+                    $single_invoices->price = $this->price;
+                    $single_invoices->discount_value = $this->discount_value;
+                    $single_invoices->tax_rate = $this->tax_rate;
+                    // قيمة الضريبة = السعر - الخصم * نسبة الضريبة /100
+                    $single_invoices->tax_value = ($this->price - $this->discount_value) * ((is_numeric($this->tax_rate) ? $this->tax_rate : 0) / 100);
+                    // الاجمالي شامل الضريبة  = السعر - الخصم + قيمة الضريبة
+                    $single_invoices->total_with_tax = $single_invoices->price -  $single_invoices->discount_value + $single_invoices->tax_value;
+                    $single_invoices->type = $this->type;
+                    $single_invoices->save();
+                    // يتم التسجيل في جدول الصندوق 
+                    $fund_accounts = new FundAcount();
+                    $fund_accounts->date = date('Y-m-d');
+                    $fund_accounts->single_invoice_id = $single_invoices->id;
+                    $fund_accounts->debit = $single_invoices->total_with_tax;
+                    $fund_accounts->credit = 0.00;
+                    $fund_accounts->save();
+                    $this->invoice_saved = true;
+                    $this->show_table = true;
+                }
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            }
 
-        $single_invoices = new SingleInvoice();
-        $single_invoices->invoice_date = date('Y-m-d');
-        $single_invoices->patient_id = $this->patient_id;
-        $single_invoices->doctor_id = $this->doctor_id;
-        $single_invoices->section_id = DB::table('section_translations')->where('name', $this->section_id)->first()->section_id;
-        $single_invoices->Service_id = $this->Service_id;
-        $single_invoices->price = $this->price;
-        $single_invoices->discount_value = $this->discount_value;
-        $single_invoices->tax_rate = $this->tax_rate;
-        // قيمة الضريبة = السعر - الخصم * نسبة الضريبة /100
-        $single_invoices->tax_value = ($this->price - $this->discount_value) * ((is_numeric($this->tax_rate) ? $this->tax_rate : 0) / 100);
-        // الاجمالي شامل الضريبة  = السعر - الخصم + قيمة الضريبة
-        $single_invoices->total_with_tax = $single_invoices->price -  $single_invoices->discount_value + $single_invoices->tax_value;
-        $single_invoices->type = $this->type;
+            // في حالة الفاتورة اجل 
+        } else {
+            try {
+                if ($this->updateMode) {
+                    // في حالة التعديل 
 
-        $single_invoices->save();
-        $this->invoice_saved = true;
-        $this->show_table = true;
+                    $single_invoices = SingleInvoice::findOrFail($this->single_invoice_id);
+                    $single_invoices->invoice_date = date('Y-m-d');
+                    $single_invoices->patient_id = $this->patient_id;
+                    $single_invoices->doctor_id = $this->doctor_id;
+                    $single_invoices->section_id = DB::table('section_translations')->where('name', $this->section_id)->first()->section_id;
+                    $single_invoices->Service_id = $this->Service_id;
+                    $single_invoices->price = $this->price;
+                    $single_invoices->discount_value = $this->discount_value;
+                    $single_invoices->tax_rate = $this->tax_rate;
+                    // قيمة الضريبة = السعر - الخصم * نسبة الضريبة /100
+                    $single_invoices->tax_value = ($this->price - $this->discount_value) * ((is_numeric($this->tax_rate) ? $this->tax_rate : 0) / 100);
+                    // الاجمالي شامل الضريبة  = السعر - الخصم + قيمة الضريبة
+                    $single_invoices->total_with_tax = $single_invoices->price -  $single_invoices->discount_value + $single_invoices->tax_value;
+                    $single_invoices->type = $this->type;
+                    $single_invoices->save();
+                    // الفاتورة اجل يتم التسجيل في حساب المريض 
+
+                    $patient_account = PatientAccount::where("single_invoice_id", $this->single_invoice_id)->first();
+                    $patient_account->date = date('Y-m-d');
+                    $patient_account->single_invoice_id = $single_invoices->id;
+                    $patient_account->patient_id = $single_invoices->patient_id;
+                    $patient_account->debit = $single_invoices->total_with_tax;
+                    $patient_account->credit = 0.00;
+                    $patient_account->save();
+                    $this->invoice_saved = true;
+                    $this->show_table = true;
+                } else {
+                    // في حالة  الحفظ 
+                    // حفظ الفاتورة 
+                    $single_invoices = new SingleInvoice();
+                    $single_invoices->invoice_date = date('Y-m-d');
+                    $single_invoices->patient_id = $this->patient_id;
+                    $single_invoices->doctor_id = $this->doctor_id;
+                    $single_invoices->section_id = DB::table('section_translations')->where('name', $this->section_id)->first()->section_id;
+                    $single_invoices->Service_id = $this->Service_id;
+                    $single_invoices->price = $this->price;
+                    $single_invoices->discount_value = $this->discount_value;
+                    $single_invoices->tax_rate = $this->tax_rate;
+                    // قيمة الضريبة = السعر - الخصم * نسبة الضريبة /100
+                    $single_invoices->tax_value = ($this->price - $this->discount_value) * ((is_numeric($this->tax_rate) ? $this->tax_rate : 0) / 100);
+                    // الاجمالي شامل الضريبة  = السعر - الخصم + قيمة الضريبة
+                    $single_invoices->total_with_tax = $single_invoices->price -  $single_invoices->discount_value + $single_invoices->tax_value;
+                    $single_invoices->type = $this->type;
+                    $single_invoices->save();
+                    // الفاتورة اجل يتم التسجيل في حساب المريض 
+
+                    $patient_account = new PatientAccount();
+                    $patient_account->date = date('Y-m-d');
+                    $patient_account->single_invoice_id = $single_invoices->id;
+                    $patient_account->patient_id = $single_invoices->patient_id;
+                    $patient_account->debit = $single_invoices->total_with_tax;
+                    $patient_account->credit = 0.00;
+                    $patient_account->save();
+                    $this->invoice_saved = true;
+                    $this->show_table = true;
+                }
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+            }
+        }
+    }
+    public function delete($id)
+    {
+        $this->single_invoice_id = $id;
+    }
+    public function destroy()
+    {
+        SingleInvoice::destroy($this->single_invoice_id);
+        return redirect()->to('/single_invoice');
     }
 }

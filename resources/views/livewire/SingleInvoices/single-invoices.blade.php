@@ -90,7 +90,7 @@
                                             </td>
                                             <td><input wire:model="price" type="text" class="form-control" readonly>
                                             </td>
-                                            <td><input wire:model="discount_value" type="text" class="form-control">
+                                            <td><input value="0" wire:model="discount_value" type="text" class="form-control">
                                             </td>
                                             <th><input wire:model="tax_rate" type="text" class="form-control"></th>
                                             <td><input type="text" class="form-control" value="{{ $tax_value }}"
