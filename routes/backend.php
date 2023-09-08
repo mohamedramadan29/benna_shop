@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DoctorController;
 use App\Http\Controllers\Dashboard\InsuranceController;
 use App\Http\Controllers\Dashboard\PatientsController;
+use App\Http\Controllers\Dashboard\ReceiptAmountController;
 use App\Http\Controllers\Dashboard\SectionController;
 use App\Http\Controllers\Dashboard\ServicesController;
 use Illuminate\Support\Facades\Auth;
@@ -70,8 +71,11 @@ Route::group(
             Route::resource('Patients', PatientsController::class);
             /***************************  End  Amulances  **/
             /***************************  start Single Invoice LiveWire  **/
-            Route::view('single_invoice','livewire.SingleInvoices.index')->name('single_invoice');
+            Route::view('single_invoice', 'livewire.SingleInvoices.index')->name('single_invoice');
             /***************************  End  Single Invoice LiveWire   **/
+            /*************************** START RECEPTS  */
+            Route::resource('Recipt', ReceiptAmountController::class);
+            /*************************** END RECEPTS  */
         });
     }
 );

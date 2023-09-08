@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('patient_accounts', function (Blueprint $table) {
+        Schema::create('recipt_accounts', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->foreignId('single_invoice_id')->references('id')->on('single_invoices')->cascadeOnDelete();
             $table->foreignId('patient_id')->references('id')->on('patients')->cascadeOnDelete();
-            $table->decimal('debit','8','2')->nullable();
-            $table->decimal('credit','8','2')->nullable();
+            $table->decimal('debit','8','2');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('patient_accounts');
+        Schema::dropIfExists('recipt_accounts');
     }
 };

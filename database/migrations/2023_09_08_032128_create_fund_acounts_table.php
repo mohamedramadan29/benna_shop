@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('fund_acounts', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->foreignId('single_invoice_id')->references('id')->on('single_invoices')->cascadeOnDelete();
+            $table->foreignId('single_invoice_id')->nullable()->references('id')->on('single_invoices')->cascadeOnDelete();
+            $table->foreignId('recipt_id')->nullable()->references('id')->on('recipt_accounts')->cascadeOnDelete();
             $table->decimal('debit','8','2')->nullable(); // مدين 
             $table->decimal('credit','8','2')->nullable(); // داين 
             $table->timestamps();
